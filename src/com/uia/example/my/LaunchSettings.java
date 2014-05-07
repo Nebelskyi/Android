@@ -49,7 +49,7 @@ public class LaunchSettings extends UiAutomatorTestCase {
 
 		getUiDevice().pressDPadUp();
 		getUiDevice().pressDPadCenter();
-		
+//		fasfasf;
 		appViews.scrollForward();
 		appViews.scrollForward();
 		appViews.scrollBackward(3);
