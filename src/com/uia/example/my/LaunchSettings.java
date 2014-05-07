@@ -9,7 +9,7 @@ import com.android.uiautomator.testrunner.UiAutomatorTestCase;
 
 public class LaunchSettings extends UiAutomatorTestCase {
 
-	public void testDemo() throws UiObjectNotFoundException {
+		public void testDemo() throws UiObjectNotFoundException {
 
 		// Simulate a short press on the HOME button.
 		getUiDevice().pressHome();
@@ -44,10 +44,16 @@ public class LaunchSettings extends UiAutomatorTestCase {
 
 		// Create a UiSelector to find the Settings app and simulate
 		// a user click to launch the app.
-		UiObject settingsApp = appViews
-				.getChildByText(new UiSelector().className(android.widget.TextView.class.getName()),"Settings");
+		UiObject settingsApp = appViews.getChildByText(new UiSelector().className(android.widget.TextView.class.getName()),"Settings");
 		settingsApp.clickAndWaitForNewWindow();
 
+		getUiDevice().pressDPadUp();
+		getUiDevice().pressDPadCenter();
+		
+		appViews.scrollForward();
+		appViews.scrollForward();
+		appViews.scrollBackward(3);
+		
 		// Validate that the package name is the expected one
 		UiObject settingsValidation = new UiObject(new UiSelector().packageName("com.android.settings"));
 		assertTrue("Unable to detect Settings", settingsValidation.exists());
