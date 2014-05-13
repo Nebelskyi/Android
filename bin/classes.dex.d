@@ -1,2 +1,2 @@
-C:\Users\vitalii.nebelskyi\workspace\LaunchSettings\bin\classes.dex : \
-C:\Users\vitalii.nebelskyi\workspace\LaunchSettings\bin\classes\com\uia\example\my\LaunchSettings.class \
+C:\Users\vitalii.nebelskyi\workspace\FirefoxTesting\bin\classes.dex : \
+C:\Users\vitalii.nebelskyi\workspace\FirefoxTesting\bin\classes\com\firefox\test\FirefoxMainTests.class \

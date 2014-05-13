@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/CDC-1.1%Foundation-1.1"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Program Files/eclipse/plugins/org.junit_4.11.0.v201303080030"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/vitalii.nebelskyi/AppData/Local/Android/android-sdk/platforms/android-19/android.jar"/>
 	<classpathentry kind="lib" path="C:/Users/vitalii.nebelskyi/AppData/Local/Android/android-sdk/platforms/android-19/uiautomator.jar"/>
 	<classpathentry kind="output" path="bin"/>
