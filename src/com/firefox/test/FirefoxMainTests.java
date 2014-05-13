@@ -103,7 +103,7 @@ public class FirefoxMainTests extends UiAutomatorTestCase {
 	
 	}
 
-	public void testSwipeBetweenMainTabs() throws UiObjectNotFoundException {
+	public void SwipeBetweenMainTabs() throws UiObjectNotFoundException {
 		
 		Log("testAddBookmark", "Start testAddBookmark Test");
 		getUiDevice().pressHome();
@@ -118,6 +118,12 @@ public class FirefoxMainTests extends UiAutomatorTestCase {
 	    UiObject firefoxApp = appViews.getChildByText(new UiSelector().className("android.widget.TextView"), "Firefox");
 	    firefoxApp.clickAndWaitForNewWindow();
 	    Log("Log:", "App is opened");
+	    
+	    
+	    UiObject tabTopSites = new UiObject(new UiSelector().textContains("TOP SITES"));
+	    tabTopSites.click();
+	    assertTrue("TOP SITES tab is not found", tabTopSites.isEnabled());
+	    Log("Log:", "TOP SITES tab is clicked");
 	    
 		UiScrollable scrollableView = new UiScrollable(new UiSelector().resourceId("org.mozilla.firefox:id/home_pager"));
 		scrollableView.setAsHorizontalList();
@@ -148,7 +154,52 @@ public class FirefoxMainTests extends UiAutomatorTestCase {
 		UiObject imageEmptyRecentsTabs = new UiObject(new UiSelector().resourceId("org.mozilla.firefox:id/home_empty_image"));
 		assertTrue("RecentsTabs Buttons is not found", imageEmptyRecentsTabs.exists() );
 		
+		buttonRecents.click();
+		assertTrue("Recents Buttons is not found", (buttonRecents.exists() && buttonRecents.isEnabled()));
+		assertTrue("", !imageEmptyRecentsTabs.exists());
+		Log("Log:", "Recents Button LIST is found");
+		
 		exitToMainWindow();
+		
+	}
+	
+	public void testUrlHint() throws UiObjectNotFoundException {
+		
+		Log("testAddBookmark", "Start testAddBookmark Test");
+		getUiDevice().pressHome();
+		
+		UiObject allAppsButton = new UiObject(new UiSelector().description("Apps"));
+		allAppsButton.clickAndWaitForNewWindow();
+		Log("Log:","Opened AllAps screen");
+		
+	    UiScrollable appViews = new UiScrollable(new UiSelector().scrollable(true));
+	    appViews.setAsHorizontalList();
+	    
+	    UiObject firefoxApp = appViews.getChildByText(new UiSelector().className("android.widget.TextView"), "Firefox");
+	    firefoxApp.clickAndWaitForNewWindow();
+	    Log("Log:", "App is opened");
+	    
+		UiObject addTab = new UiObject(new UiSelector().resourceId("org.mozilla.firefox:id/url_bar_title"));
+		addTab.click();
+
+		UiObject urlEditText = new UiObject(new UiSelector().resourceId("org.mozilla.firefox:id/url_edit_text"));
+		urlEditText.setText("sma");
+	    
+		UiObject urlTip = new UiObject(new UiSelector().textContains("smarttech.com/"));
+		assertTrue("Url tip is not found", urlTip.exists());
+	    Log("Log:"," Hint is verified");
+		
+		getUiDevice().pressEnter();
+		waitForPageToLoad();
+
+		UiObject btnBack = new UiObject(new UiSelector().resourceId("org.mozilla.firefox:id/back"));
+		btnBack.click();
+		
+	    UiObject tabTopSites = new UiObject(new UiSelector().textContains("TOP SITES"));
+	    assertTrue("TOP SITES tab is not found - wrong screen", tabTopSites.exists());
+	    Log("Log:", "Returned to main screen, test completed");
+	    
+	    exitToMainWindow();
 		
 	}
 	
