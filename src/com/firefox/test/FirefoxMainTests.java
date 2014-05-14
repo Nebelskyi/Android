@@ -1,18 +1,21 @@
 package com.firefox.test;
 
 import android.graphics.Point;
-import android.util.Log;
 import android.view.KeyEvent;
 
 import com.android.uiautomator.core.UiObject;
 import com.android.uiautomator.core.UiObjectNotFoundException;
 import com.android.uiautomator.core.UiScrollable;
 import com.android.uiautomator.core.UiSelector;
-import com.android.uiautomator.testrunner.UiAutomatorTestCase;
+import com.firefox.screens.BaseScreen;
+import com.firefox.screens.MainCentralScreen;
 // UI AUTOMATOR
-public class FirefoxMainTests extends UiAutomatorTestCase {
+public class FirefoxMainTests extends BaseScreen {
 
-    protected void setUp() throws Exception {
+	BaseScreen baseScreen = new BaseScreen();
+	MainCentralScreen mainScreen = new MainCentralScreen();
+
+	protected void setUp() throws Exception {
         System.out.println("Global setUp ");
         closeTestApplication();
         openTestApplication();
@@ -27,24 +30,16 @@ public class FirefoxMainTests extends UiAutomatorTestCase {
 	public void AddNewWebPageZoomingAndSwiping() throws UiObjectNotFoundException {
 		Log("Log:", "Start testAddNewWebPageZoomingAndSwiping Test");
 		
-		UiObject addTab = new UiObject(new UiSelector().resourceId("org.mozilla.firefox:id/tabs"));
-		addTab.click();
-
-		UiObject addTabIcon = new UiObject(new UiSelector().resourceId("org.mozilla.firefox:id/add_tab"));
-		addTabIcon.click();
+		openAllTabsMenu();
 		
-		UiObject urlField = new UiObject(new UiSelector().textContains("Enter Search"));
-		assertTrue("Unable to detect url field", urlField.exists());
+		clickAddTabIcon();
 		
-		urlField.click();
+		enableUrlField();
 		
 		UiObject tipInUrl = new UiObject(new UiSelector().resourceIdMatches("org.mozilla.firefox:id/url_edit_text"));
-		assertTrue("Tips In URL is not visible", tipInUrl.isEnabled());
+		assertTrue("Tips In URL is not visible", (tipInUrl.isEnabled() && tipInUrl.toString().equals("about:home")));
 		
-		tipInUrl.setText("test");
-		
-		UiObject goIcon = new UiObject(new UiSelector().resourceIdMatches("org.mozilla.firefox:id/go"));
-		goIcon.click();
+		openUrl("test");
 		
 		UiObject webView = new UiObject(new UiSelector().resourceId("org.mozilla.firefox:id/layer_view"));
         
@@ -62,6 +57,7 @@ public class FirefoxMainTests extends UiAutomatorTestCase {
         webPageView.swipeRight(112);
         webPageView.swipeLeft(118);
         
+        Log("Log:", "Start testAddNewWebPageZoomingAndSwiping Test");
 	}
 
 	public void VerifyLastVisitedWebSiteInHistory() throws UiObjectNotFoundException {
@@ -90,46 +86,30 @@ public class FirefoxMainTests extends UiAutomatorTestCase {
 	
 	}
 
-	public void SwipeBetweenMainTabs() throws UiObjectNotFoundException {
+	public void testSwipeBetweenMainTabs() throws UiObjectNotFoundException {
 		
-	    UiObject tabTopSites = new UiObject(new UiSelector().textContains("TOP SITES"));
-	    tabTopSites.click();
-	    assertTrue("TOP SITES tab is not found", tabTopSites.isEnabled());
-	    Log("Log:", "TOP SITES tab is clicked");
-	    
-		UiScrollable scrollableView = new UiScrollable(new UiSelector().resourceId("org.mozilla.firefox:id/home_pager"));
-		scrollableView.setAsHorizontalList();
+		mainScreen.clickTopSitesTab();
 		
-		scrollableView.swipeLeft(50);
+		mainScreen.scrollToRightScreen();
 		
-		UiObject tabBookmarkFirefoxSupport = new UiObject(new UiSelector().textContains("Firefox: Support"));
-		assertTrue("Firefox:Support bookmark is not found", tabBookmarkFirefoxSupport.exists());
-		Log("Log:", "Bookmark is found");
+		mainScreen.verifyBookamarkExists("Firefox: Support");
 		
-		scrollableView.swipeLeft(100);
+		mainScreen.scrollToRightScreen();
 		
-		UiObject hintReadingList = new UiObject(new UiSelector().resourceId("org.mozilla.firefox:id/home_empty_hint"));
-		assertTrue("READING LIST is not found", hintReadingList.exists());
-		Log("Log:", "READING LIST is found");
+		mainScreen.verifyReadingListEmptyTipExists();
+		
+		mainScreen.scrollToRightScreen();
+		
+		mainScreen.clickRecentsButton();
+		
+		mainScreen.clickRecentsTabsButton();
 
-		scrollableView.swipeLeft(25);
+		assertTrue("RecentsTabs Buttons is not found", mainScreen.isVisibleEmptyRecentTabsImage() );
+
+		mainScreen.clickRecentsButton();
 		
-		UiObject buttonRecents = new UiObject(new UiSelector().className("android.widget.ImageButton").instance(0));
-		assertTrue("Recents Buttons is not found", (buttonRecents.exists() && buttonRecents.isEnabled()));
-		Log("Log:", "Recents Button LIST is found");
-		
-		UiObject buttonRecentsTabs = new UiObject(new UiSelector().className("android.widget.ImageButton").instance(1));
-		buttonRecentsTabs.click();
-		assertTrue("RecentsTabs Buttons is not found", (buttonRecentsTabs.exists() && buttonRecentsTabs.isEnabled()));
-		Log("Log:", "CLICKING recents tabs button");
-		
-		UiObject imageEmptyRecentsTabs = new UiObject(new UiSelector().resourceId("org.mozilla.firefox:id/home_empty_image"));
-		assertTrue("RecentsTabs Buttons is not found", imageEmptyRecentsTabs.exists() );
-		
-		buttonRecents.click();
-		assertTrue("Recents Buttons is not found", (buttonRecents.exists() && buttonRecents.isEnabled()));
-		assertTrue("", !imageEmptyRecentsTabs.exists());
-		Log("Log:", "Recents Button LIST is found");
+		assertTrue("", !mainScreen.isVisibleEmptyRecentTabsImage());
+		Log("Log:", "Recents Button LIST is found but it should not");
 		
 	}
 	
@@ -157,18 +137,15 @@ public class FirefoxMainTests extends UiAutomatorTestCase {
 	    
 	}
 	
-	public void testSwitchLanguage() throws UiObjectNotFoundException {
+	public void SwitchLanguage() throws UiObjectNotFoundException {
 		
-		UiObject addTab = new UiObject(new UiSelector().resourceId("org.mozilla.firefox:id/url_bar_title"));
-		addTab.click();
+		baseScreen.openAllTabsMenu();
 		
-		UiObject urlEditText = new UiObject(new UiSelector().resourceId("org.mozilla.firefox:id/url_edit_text"));
-		urlEditText.setText("sma");
+		baseScreen.clickAllTabsIcon();
+		baseScreen.clickPrivateIcon();
+		baseScreen.clickSyncIcon();
 		
-		switchLanguage();
-		switchLanguage();
-		
-		getUiDevice().waitForIdle();
+		clickAtMiddleOfTheScreen();
 		
 		Log("Log:", "Returned to main screen, test completed");
 		
@@ -179,9 +156,7 @@ public class FirefoxMainTests extends UiAutomatorTestCase {
 		getUiDevice().pressKeyCode(KeyEvent.KEYCODE_LANGUAGE_SWITCH);
 		
 	}
-	
-	
-	
+
 	public void closeTestApplication() {
 		UiObject allAppsButton = new UiObject(new UiSelector().description("Apps"));
 		while(!allAppsButton.exists()) {
@@ -204,20 +179,6 @@ public class FirefoxMainTests extends UiAutomatorTestCase {
 		firefoxApp.clickAndWaitForNewWindow();
 		Log("Log:", "App is opened");
     }
-	
-	private void waitForPageToLoad() {
-	
-		UiObject progressIcon = new UiObject(new UiSelector().resourceIdMatches("org.mozilla.firefox:id/progress"));
-		progressIcon.waitUntilGone(10000);
-		Log("Timeout error:", "page is not loaded in 10 seconds");
-	}
-
-	private void Log(String tag, String text){
-		
-		Log.i(tag, text);
-		System.out.println(tag + " " + text);
-		
-	}
 	
 	@SuppressWarnings("unused")
 	private void scaleUp(UiObject webView){
